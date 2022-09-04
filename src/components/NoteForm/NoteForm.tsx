@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import styled from "@emotion/styled";
 import ClickAwayListener from '@mui/base/ClickAwayListener';
 import {NotesContext} from "../../context/NotesProvider";
-import { uuid } from 'uuidv4';
+import {v4 as uuid} from 'uuid'
 
 const Container = styled(Box)`
   display: flex;
@@ -27,15 +27,28 @@ const NoteForm = () => {
     // при клике на другое место
     const [visible, setVisible] = useState<boolean>(false)
 
-    const [addNote, setAddNote] = useState(note)
+    const [addNote, setAddNote] = useState({...note, id: uuid()})
     // CONTEXT
-    const [notes, setNotes] = useContext(NotesContext)
+    const {setNotes} = useContext(NotesContext)
+    const onTextChange = (event:any) => {
+        let changedNote = {...addNote, [event.target.name]: event.target.value}
+        setAddNote(changedNote)
+    }
+    const handleClickAway = () =>{
+        setVisible(false)
+        setAddNote({...note, id: uuid()})
+        if(addNote.headerText || addNote.text){
+            setNotes((prevArr: any) => [addNote, ...prevArr])
+        }
+    }
 
     return (
-        <ClickAwayListener onClickAway={() => setVisible(false)}>
+        <ClickAwayListener onClickAway={handleClickAway}>
             <Container >
-                {visible && <TextField placeholder={'Введите заголовок'} variant={'standard'} InputProps={{ disableUnderline: true }}/>}
-                <TextField onClick={() => setVisible(true)} placeholder={'Заметка...'} variant={'standard'} multiline InputProps={{ disableUnderline: true }}/>
+                {visible && <TextField placeholder={'Введите заголовок'} variant={'standard'} InputProps={{ disableUnderline: true }}
+                onChange={(event) => onTextChange(event)} name={'headerText'} value={addNote.headerText}/>}
+                <TextField onClick={() => setVisible(true)} placeholder={'Заметка...'} variant={'standard'} multiline InputProps={{ disableUnderline: true }}
+                           onChange={(event) => onTextChange(event)} name={'text'} value={addNote.text}/>
             </Container>
         </ClickAwayListener>
 

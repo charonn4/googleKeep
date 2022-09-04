@@ -1,0 +1,9 @@
+.buttonsWrapper svg{
+    cursor: pointer;
+    transition: .3s ease;
+    padding: 8px;
+    border-radius: 50%;
+}
+.buttonsWrapper svg:hover{
+    background-color: rgba(95,99,104,0.157);
+}

@@ -2,11 +2,11 @@ import React, {createContext, useState} from 'react';
 
 export const NotesContext = createContext(null as any)
 
-
-const NotesProvider = ({chidlren}: any) => {
+const NotesProvider = ({children}: any) => {
     const [notes, setNotes] = useState<any>([])
     const [archiveNotes, setArchiveNotes] = useState<any>([])
     const [deletedNotes, setDeletedNotes] = useState<any>([])
+    const [searchText, setSearchText] = useState<string>('')
 
     return (
             <NotesContext.Provider value={{
@@ -15,9 +15,11 @@ const NotesProvider = ({chidlren}: any) => {
                 archiveNotes,
                 setArchiveNotes,
                 deletedNotes,
-                setDeletedNotes
+                setDeletedNotes,
+                searchText,
+                setSearchText
             }}>
-                {chidlren}
+                {children}
             </NotesContext.Provider>
     );
 };
