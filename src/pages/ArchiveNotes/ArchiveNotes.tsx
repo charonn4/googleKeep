@@ -15,8 +15,7 @@ const ArchiveNotes = () => {
     const {archiveNotes, searchText} = useContext(NotesContext)
     const fields = ['headerText', 'text']
     const search = (data:any) =>{
-        const filteredNotes = data.filter((note:any)=> fields.some((field) => note[field].toLowerCase().includes(searchText.toLowerCase())))
-        return filteredNotes
+        return  data.filter((note:any)=> fields.some((field) => note[field].toLowerCase().includes(searchText.toLowerCase())))
     }
     return (
         <Box sx={{ display: 'flex' }}>
@@ -29,7 +28,7 @@ const ArchiveNotes = () => {
                                 <ArchiveNote note={note}/>
                             </Grid>
                         ) : <NothingFound/>}
-                    </Grid> : <EmptyNotes text='Здесь будут храниться архивированные заметки.'/>
+                    </Grid> : searchText.length > 0 ? <NothingFound/> : <EmptyNotes text='Здесь будут храниться архивированные заметки.'/>
                 }
 
             </Box>

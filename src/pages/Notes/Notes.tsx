@@ -14,32 +14,13 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 const Notes = () => {
-    const {notes, setNotes, searchText} = useContext(NotesContext)
+    const {notes, searchText} = useContext(NotesContext)
     const fields = ['headerText', 'text']
     const search = (data:any) =>{
-        const filteredNotes = data.filter((note:any)=> fields.some((field) => note[field].toLowerCase().includes(searchText.toLowerCase())))
-        return filteredNotes
+        return data.filter((note:any)=> fields.some((field) => note[field].toLowerCase().includes(searchText.toLowerCase())))
+
     }
 
-    const reorder = (list:any, startIndex:any, endIndex:any) => {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
-
-        return result;
-    }
-
-    const onDragEnd = (result:any) =>{
-        if (!result.destination) {
-            return;
-        }
-        const items = reorder(
-            notes,
-            result.source.index,
-            result.destination.index
-        )
-        setNotes(items)
-    }
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -54,7 +35,7 @@ const Notes = () => {
                                                 </Grid>
                                     ) : <NothingFound/>}
                                 </Grid>
-                    : <EmptyNotes text='Здесь будут ваши заметки.'/>
+                    : searchText.length > 0 ? <NothingFound/> : <EmptyNotes text='Здесь будут ваши заметки.'/>
                 }
 
             </Box>

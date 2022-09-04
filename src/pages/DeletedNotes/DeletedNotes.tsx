@@ -15,8 +15,7 @@ const DeletedNotes = () => {
     const {deletedNotes, searchText} = useContext(NotesContext)
     const fields = ['headerText', 'text']
     const search = (data:any) =>{
-        const filteredNotes = data.filter((note:any)=> fields.some((field) => note[field].toLowerCase().includes(searchText.toLowerCase())))
-        return filteredNotes
+        return data.filter((note:any)=> fields.some((field) => note[field].toLowerCase().includes(searchText.toLowerCase())))
     }
     return (
         <Box sx={{ display: 'flex' }}>
@@ -29,7 +28,7 @@ const DeletedNotes = () => {
                                 <DeletedNote note={note}/>
                             </Grid>
                         ) : <NothingFound/>}
-                    </Grid> : <EmptyNotes text='В корзине ничего нет.'/>
+                    </Grid> : searchText.length > 0 ? <NothingFound/> : <EmptyNotes text='В корзине ничего нет.'/>
                 }
 
             </Box>
