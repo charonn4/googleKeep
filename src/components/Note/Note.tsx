@@ -12,6 +12,12 @@ import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import style from './Note.module.css'
 import OtherActionsNote from "../OtherActionsNote/OtherActionsNote";
 import {NotesContext} from "../../context/NotesProvider";
+import Dialog from '@mui/material/Dialog';
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import {v4 as uuid} from "uuid";
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 
 const NoteCard = styled(Card)`
     width: 280px;
@@ -19,6 +25,18 @@ const NoteCard = styled(Card)`
   border-radius: 8px;
   border: 1px solid #e0e0e0;
   margin: 10px;
+`
+
+
+
+const Container = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
+  padding: 12px;
+  border-radius: 8px;
+  width: 400px;
 `
 
 const Note = ({note}: any) => {
@@ -40,26 +58,66 @@ const Note = ({note}: any) => {
         setArchiveNotes((prevArr:any)=> [note, ...prevArr])
     }
 
+    // для редактирования
+    const [openModal, setOpenModal] = useState<boolean>(false)
+
+    const [editNote, setEditNote] = useState({...note})
+    const onTextChange = (event:any) => {
+        let changedNote = {...editNote, [event.target.name]: event.target.value}
+        setEditNote(changedNote)
+    }
+
+    const handleClickAway = () => {
+        setOpenModal(false)
+        const filteredNotes = notes.filter((data:any)=> data.id !== editNote.id)
+        if(note !== editNote){
+            setNotes(()=> [editNote, ...filteredNotes])
+        }
+
+
+    }
+
     return (
-        <NoteCard onMouseEnter={()=>setButtonsVisible('1')} onMouseLeave={()=>setButtonsVisible('0')}>
-            <CardContent>
-                <Typography>{note.headerText}</Typography>
-                <Typography>{note.text}</Typography>
-            </CardContent>
-            <CardActions className={style.buttonsWrapper} sx={{
-                justifyContent: 'space-between'
-            }}>
-                <AddAlertOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
-                <PersonAddAltOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
-                <PaletteOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
-                <InsertPhotoOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
-                <ArchiveOutlinedIcon onClick={() => archiveNote(note)} sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
-                 {/*дропдаун для допольнительных действий*/}
-                <OtherActionsNote deleteNote={() => deleteNote(note)} isButtonsVisible={isButtonsVisible} />
+        <>
+            <NoteCard onClick={()=>setOpenModal(true)} onMouseEnter={()=>setButtonsVisible('1')} onMouseLeave={()=>setButtonsVisible('0')}>
+                <CardContent>
+                    <Typography>{note.headerText}</Typography>
+                    <Typography>{note.text}</Typography>
+                </CardContent>
+                <CardActions className={style.buttonsWrapper} sx={{
+                    justifyContent: 'space-between'
+                }}>
+                    <AddAlertOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
+                    <PersonAddAltOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
+                    <PaletteOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
+                    <InsertPhotoOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
+                    <ArchiveOutlinedIcon onClick={() => archiveNote(note)} sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
+                    {/*дропдаун для допольнительных действий*/}
+                    <OtherActionsNote deleteNote={() => deleteNote(note)} isButtonsVisible={isButtonsVisible} />
 
-            </CardActions>
+                </CardActions>
 
-        </NoteCard>
+            </NoteCard>
+            <Dialog open={openModal} onClose={ handleClickAway }>
+                <Container >
+                     <DialogContent>
+                         <TextField onChange={(event) => onTextChange(event)} placeholder={'Введите заголовок'} variant={'standard'} InputProps={{ disableUnderline: true }}
+                                    name={'headerText'} value={editNote.headerText} />
+                         <TextField placeholder={'Заметка...'} value={editNote.text} variant={'standard'} multiline InputProps={{ disableUnderline: true }}
+                                    onChange={(event) => onTextChange(event)} name={'text'} />
+                     </DialogContent>
+                    <DialogActions className={style.buttonsFooter}>
+                        <AddAlertOutlinedIcon  fontSize={'small'}/>
+                        <PersonAddAltOutlinedIcon fontSize={'small'}/>
+                        <PaletteOutlinedIcon fontSize={'small'}/>
+                        <InsertPhotoOutlinedIcon  fontSize={'small'}/>
+                        <ArchiveOutlinedIcon onClick={() => archiveNote(note)} fontSize={'small'}/>
+                        {/*дропдаун для допольнительных действий*/}
+                        <OtherActionsNote deleteNote={() => deleteNote(note)} />
+                    </DialogActions>
+                </Container>
+            </Dialog>
+        </>
     );
 };
 

@@ -40,6 +40,7 @@ const NoteForm = () => {
         if(addNote.headerText || addNote.text){
             setNotes((prevArr: any) => [addNote, ...prevArr])
         }
+
     }
 
     return (

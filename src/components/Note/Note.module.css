@@ -7,3 +7,16 @@
 .buttonsWrapper svg:hover{
     background-color: rgba(95,99,104,0.157);
 }
+.buttonsFooter{
+    justify-content: flex-start;
+    padding: 8px 20px;
+}
+.buttonsFooter svg{
+    cursor: pointer;
+    transition: .3s ease;
+    padding: 8px;
+    border-radius: 50%;
+}
+.buttonsFooter svg:hover{
+    background-color: rgba(95,99,104,0.157);
+}
