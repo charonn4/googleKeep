@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Tooltip from '@mui/material/Tooltip';
 
 const OtherActionsNote = ({isButtonsVisible, deleteNote}: any) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -15,7 +16,9 @@ const OtherActionsNote = ({isButtonsVisible, deleteNote}: any) => {
     };
     return (
         <div>
-            <MoreVertIcon onClick={handleClick} sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
+            <Tooltip title='Ещё'>
+                <MoreVertIcon onClick={handleClick} sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
+            </Tooltip>
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}

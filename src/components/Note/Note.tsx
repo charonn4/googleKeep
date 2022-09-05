@@ -18,6 +18,7 @@ import Box from "@mui/material/Box";
 import {v4 as uuid} from "uuid";
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import Tooltip from '@mui/material/Tooltip';
 
 const NoteCard = styled(Card)`
     width: 280px;
@@ -79,19 +80,29 @@ const Note = ({note}: any) => {
 
     return (
         <>
-            <NoteCard onClick={()=>setOpenModal(true)} onMouseEnter={()=>setButtonsVisible('1')} onMouseLeave={()=>setButtonsVisible('0')}>
-                <CardContent>
+            <NoteCard  onMouseEnter={()=>setButtonsVisible('1')} onMouseLeave={()=>setButtonsVisible('0')}>
+                <CardContent onClick={()=>setOpenModal(true)}>
                     <Typography>{note.headerText}</Typography>
                     <Typography>{note.text}</Typography>
                 </CardContent>
                 <CardActions className={style.buttonsWrapper} sx={{
                     justifyContent: 'space-between'
                 }}>
-                    <AddAlertOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
-                    <PersonAddAltOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
-                    <PaletteOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
-                    <InsertPhotoOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
-                    <ArchiveOutlinedIcon onClick={() => archiveNote(note)} sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
+                    <Tooltip title="Сохранить напоминание">
+                        <AddAlertOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
+                    </Tooltip>
+                    <Tooltip title="Соавторы">
+                        <PersonAddAltOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
+                    </Tooltip>
+                    <Tooltip title="Параметры фона">
+                        <PaletteOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
+                    </Tooltip>
+                    <Tooltip title="Добавить картинку">
+                        <InsertPhotoOutlinedIcon sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
+                    </Tooltip>
+                    <Tooltip title="Архивировать">
+                        <ArchiveOutlinedIcon onClick={() => archiveNote(note)} sx={{opacity: `${isButtonsVisible}`}} fontSize={'small'}/>
+                    </Tooltip>
                     {/*дропдаун для допольнительных действий*/}
                     <OtherActionsNote deleteNote={() => deleteNote(note)} isButtonsVisible={isButtonsVisible} />
 
@@ -111,7 +122,9 @@ const Note = ({note}: any) => {
                         <PersonAddAltOutlinedIcon fontSize={'small'}/>
                         <PaletteOutlinedIcon fontSize={'small'}/>
                         <InsertPhotoOutlinedIcon  fontSize={'small'}/>
-                        <ArchiveOutlinedIcon onClick={() => archiveNote(note)} fontSize={'small'}/>
+                        <Tooltip title='Архивировать'>
+                            <ArchiveOutlinedIcon onClick={() => archiveNote(note)} fontSize={'small'}/>
+                        </Tooltip>
                         {/*дропдаун для допольнительных действий*/}
                         <OtherActionsNote deleteNote={() => deleteNote(note)} />
                     </DialogActions>
